@@ -52,6 +52,8 @@ Make sure you have Docker and Docker Compose installed on your system. 🐳
 
 8. The ping checks will run periodically based on the configured interval. The ping results will be stored in the InfluxDB database hosts_metrics and visualized in the Grafana dashboard. ⏱️📈
 
+![Screenshot](img/Grafana.PNG)
+
 ## Customization 🛠️
 
 To change the ping interval, modify the TEST_PERIODICITY variable in the Bash script (monitor.sh).
