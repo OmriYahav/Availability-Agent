@@ -6,6 +6,8 @@ WORKDIR /app
 COPY AvailabilityAgent.sh /app/AvailabilityAgent.sh
 COPY hosts /app/hosts
 
+RUN sed -i 's/\r$//' /app/AvailabilityAgent.sh /app/hosts
+
 RUN chmod +x /app/AvailabilityAgent.sh
 
 ENTRYPOINT ["/app/AvailabilityAgent.sh"]
