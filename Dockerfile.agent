@@ -1,0 +1,11 @@
+FROM bash:5.2
+
+RUN apk add --no-cache iputils curl
+
+WORKDIR /app
+COPY AvailabilityAgent.sh /app/AvailabilityAgent.sh
+COPY hosts /app/hosts
+
+RUN chmod +x /app/AvailabilityAgent.sh
+
+ENTRYPOINT ["/app/AvailabilityAgent.sh"]
