@@ -1,59 +1,53 @@
 services:
   influxdb:
-    image: influxdb:1.8.10
-    restart: unless-stopped
-    env_file:
-      - .env
+    image: "influxdb:1.8"
+    restart: always
     environment:
-      INFLUXDB_DB: ${INFLUX_DB:-hosts_metrics}
-      INFLUXDB_HTTP_AUTH_ENABLED: ${INFLUX_HTTP_AUTH_ENABLED:-true}
-      INFLUXDB_ADMIN_USER: ${INFLUX_USER:-admin}
-      INFLUXDB_ADMIN_PASSWORD: ${INFLUX_PASS:-change_me}
+      INFLUXDB_DB: "${INFLUX_DB:-ping}"
     ports:
-      - "${INFLUX_PORT:-8086}:8086"
+      - "8086:8086"
     volumes:
-      - influxdb-data:/var/lib/influxdb
+      - "influxdb-data:/var/lib/influxdb"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8086/ping"]
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:8086/ping"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 12
       start_period: 10s
 
   agent:
     build:
-      context: .
-      dockerfile: Dockerfile.agent
-    restart: unless-stopped
-    env_file:
-      - .env
+      context: "."
+      dockerfile: "Dockerfile.agent"
+    restart: always
     environment:
-      HOSTS_FILE: /app/hosts
-      INFLUX_URL: http://influxdb:8086
+      HOSTS_FILE: "/app/hosts"
+      INFLUX_URL: "http://influxdb:8086"
+      INFLUX_DB: "${INFLUX_DB:-ping}"
+      INTERVAL_SECONDS: "${INTERVAL_SECONDS:-5}"
+      PING_TIMEOUT_SECONDS: "${PING_TIMEOUT_SECONDS:-2}"
+      AGENT_NAME: "${AGENT_NAME:-agent-1}"
     depends_on:
       influxdb:
         condition: service_healthy
     volumes:
-      - ./hosts:/app/hosts:ro
+      - "./hosts:/app/hosts:ro"
 
   grafana:
-    image: grafana/grafana:10.4.5
-    restart: unless-stopped
-    env_file:
-      - .env
+    image: "grafana/grafana:10.4.5"
+    restart: always
     ports:
       - "${GRAFANA_PORT:-3003}:3000"
     environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
-      GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s:%(http_port)s/"
+      GF_SECURITY_ADMIN_USER: "${GRAFANA_ADMIN_USER:-admin}"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD:-admin}"
     depends_on:
       influxdb:
         condition: service_healthy
     volumes:
-      - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - "grafana-data:/var/lib/grafana"
+      - "./grafana/provisioning:/etc/grafana/provisioning:ro"
+      - "./grafana/dashboards:/var/lib/grafana/dashboards:ro"
 
 volumes:
   influxdb-data:

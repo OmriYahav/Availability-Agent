@@ -1,13 +1,12 @@
-FROM bash:5.2
+FROM python:3.12-alpine
 
-RUN apk add --no-cache iputils curl
+RUN apk add --no-cache iputils
 
 WORKDIR /app
-COPY AvailabilityAgent.sh /app/AvailabilityAgent.sh
+
+COPY agent/pinger.py /app/pinger.py
 COPY hosts /app/hosts
 
-RUN sed -i 's/\r$//' /app/AvailabilityAgent.sh /app/hosts
+RUN sed -i 's/\r$//' /app/hosts
 
-RUN chmod +x /app/AvailabilityAgent.sh
-
-ENTRYPOINT ["/app/AvailabilityAgent.sh"]
+ENTRYPOINT ["python", "/app/pinger.py"]
