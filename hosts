@@ -1,4 +1,4 @@
-# One host per line. Empty lines and lines starting with # are ignored.
+# One host per line
 1.1.1.1
-google.com
 8.8.8.8
+google.com

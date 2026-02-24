@@ -1,3 +1,4 @@
-hosts text eol=lf
 *.sh text eol=lf
+*.py text eol=lf
 *.yaml text eol=lf
+hosts text eol=lf

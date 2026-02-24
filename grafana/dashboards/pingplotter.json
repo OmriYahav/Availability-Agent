@@ -1,0 +1,60 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {"type": "influxdb", "uid": "ping-influx"},
+      "fieldConfig": {"defaults": {"unit": "ms"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "targets": [{"groupBy": [{"params": ["$__interval"], "type": "time"}, {"params": ["null"], "type": "fill"}, {"params": ["host"], "type": "tag"}], "measurement": "ping", "orderByTime": "ASC", "policy": "default", "refId": "A", "resultFormat": "time_series", "select": [[{"params": ["latency_ms"], "type": "field"}, {"params": [], "type": "mean"}]], "tags": []}],
+      "title": "Latency (ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "ping-influx"},
+      "fieldConfig": {"defaults": {"unit": "ms"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "targets": [{"groupBy": [{"params": ["$__interval"], "type": "time"}, {"params": ["null"], "type": "fill"}, {"params": ["host"], "type": "tag"}], "measurement": "ping", "orderByTime": "ASC", "refId": "A", "resultFormat": "time_series", "select": [[{"params": ["jitter_ms"], "type": "field"}, {"params": [], "type": "mean"}]], "tags": []}],
+      "title": "Jitter (ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "ping-influx"},
+      "fieldConfig": {"defaults": {"unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [{"groupBy": [{"params": ["$__interval"], "type": "time"}, {"params": ["null"], "type": "fill"}, {"params": ["host"], "type": "tag"}], "measurement": "ping", "orderByTime": "ASC", "refId": "A", "resultFormat": "time_series", "select": [[{"params": ["packet_loss_percent"], "type": "field"}, {"params": [], "type": "mean"}]], "tags": []}],
+      "title": "Packet Loss (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "ping-influx"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "id": 4,
+      "targets": [{"groupBy": [{"params": ["host"], "type": "tag"}], "measurement": "ping", "orderByTime": "DESC", "refId": "A", "resultFormat": "table", "select": [[{"params": ["success"], "type": "field"}, {"params": [], "type": "last"}], [{"params": ["latency_ms"], "type": "field"}, {"params": [], "type": "last"}], [{"params": ["jitter_ms"], "type": "field"}, {"params": [], "type": "last"}], [{"params": ["packet_loss_percent"], "type": "field"}, {"params": [], "type": "last"}]], "tags": []}],
+      "title": "Current Status",
+      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true}, "indexByName": {}, "renameByName": {"last": "value"}}}],
+      "type": "table"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["ping", "network"],
+  "templating": {"list": []},
+  "time": {"from": "now-15m", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "PingPlotter Local",
+  "uid": "pingplotter-local",
+  "version": 1,
+  "weekStart": ""
+}
