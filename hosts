@@ -1,8 +1,4 @@
-_gateway
-127.0.0.1
+# One host per line. Empty lines and lines starting with # are ignored.
+1.1.1.1
 google.com
-10.0.0.34
-172.16.10.1
-172.16.10.254
-tryhackme.com
-hackthebox.com
+8.8.8.8
